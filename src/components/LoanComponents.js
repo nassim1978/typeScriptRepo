@@ -83,6 +83,7 @@ function LoanForm() {
     age: "",
     isEmployee: false,
     salaryRange: "",
+    email: "",
   });
 
   function handleFormSubmit(event) {
@@ -100,7 +101,8 @@ function LoanForm() {
   const btnIsDisabled =
     loanInputs.name === "" ||
     loanInputs.age === "" ||
-    loanInputs.phoneNumber === "";
+    loanInputs.phoneNumber === "" ||
+    loanInputs.email === "";
 
   function handleDivClick() {
     console.log("div clicked");
@@ -133,18 +135,63 @@ function LoanForm() {
             paddingLeft: "38%",
           }}
         >
-          <TextField label="Nombre" variant="outlined" required />
-          <TextField label="Edad" variant="outlined" required />
+          <TextField
+            label="Nombre"
+            variant="outlined"
+            required
+            onChange={(event) => {
+              setLoanInputs({
+                ...loanInputs,
+                name: event.target.value,
+              });
+            }}
+          />
+          <TextField
+            label="Edad"
+            variant="outlined"
+            required
+            onChange={(event) => {
+              setLoanInputs({
+                ...loanInputs,
+                age: event.target.value,
+              });
+            }}
+          />
           <TextField
             className="loanInput"
             label="Telefono"
             variant="outlined"
             type="phone"
             required
+            onChange={(event) => {
+              setLoanInputs({
+                ...loanInputs,
+                phoneNumber: event.target.value,
+              });
+            }}
           />
-          <TextField label="Email" variant="outlined" type="email" required />
+          <TextField
+            label="Email"
+            variant="outlined"
+            type="email"
+            required
+            onChange={(event) => {
+              setLoanInputs({
+                ...loanInputs,
+                email: event.target.value,
+              });
+            }}
+          />
           <lable>
-            eres Trabajador? <Checkbox />
+            eres Trabajador?{" "}
+            <Checkbox
+              onChange={(event) => {
+                setLoanInputs({
+                  ...loanInputs,
+                  isEmployee: event.target.checked,
+                });
+              }}
+            />
           </lable>
 
           <Select
@@ -155,9 +202,20 @@ function LoanForm() {
             components={{
               Option,
             }}
+            onChange={(event) => {
+              setLoanInputs({
+                ...loanInputs,
+                salaryRange: event.label,
+              });
+            }}
           />
 
-          <Button variant="contained" color="primary" type="submit">
+          <Button
+            disabled={btnIsDisabled}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
             Guardar
           </Button>
         </Box>

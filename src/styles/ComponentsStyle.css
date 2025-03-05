@@ -1,4 +1,4 @@
-.boton {
+#boton {
   padding-top: 2%;
   padding-bottom: 2%;
   position: center;
@@ -9,12 +9,44 @@
   background: rgb(228, 142, 81);
   color: rgb(226, 220, 220);
 }
-.loanForm {
+.form {
+  align-self: auto;
+  padding-bottom: 10px;
+  background-color: aquamarine;
+  max-width: 50%;
+  height: 2.5rem;
+  padding: 0 1.25rem;
+  border: 1px solid;
+  border-radius: 2px;
+  margin: 0.625rem auto;
+  transition: all 250ms;
+  @media (min-width: 768px) {
+    width: clamp(120px, 35vw, 420px);
+  }
+  &:focus {
+    outline: none;
+    border-top-color: rgba(11, 240, 61, 0.1);
+  }
+
+  &::placeholder {
+    display: none;
+    color: transparent;
+
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+  }
+
+  &:not(:placeholder-shown) {
+    border-top-color: rgba(0, 0, 0, 0.5);
+  }
+}
+.loanForm1111 {
   display: flex;
   border-radius: 10px;
   flex-direction: colum;
-
-  max-width: 300px;
+  align-self: center;
+  max-width: 20%;
   padding-top: 1%;
   padding-bottom: 1%;
 

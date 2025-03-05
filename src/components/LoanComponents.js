@@ -1,142 +1,168 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import Modal from "../components/Modal";
-function loanForm() {
-  const formprops = (p) => {
-    const { nombre, apellido, telefono, correo, direccion } = p;
+import Select, { components } from "react-select";
+import "../styles/ComponentsStyle.css";
+import { TextField, Button, Box, Checkbox } from "@mui/material";
+import MyComponent from "../components/MyComponent";
+import { LoanInputContext } from "../contexts/LoanFormInputContext";
+import { useContext } from "react";
+import { UserContext } from "../contexts/UserContext";
+
+function LoanForm() {
+  const userData = useContext(UserContext);
+  const [deviceNameInputValue, setDeviceNameInputValue] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+
+  const colourOptions = [
+    {
+      value: "",
+      label: "Rango de Salario",
+      description: "",
+    },
+    {
+      value: "red",
+      label: "Rango de Salario: 100-500",
+      description: "",
+    },
+    {
+      value: "green",
+      label: "Rango de Salario: 501-1000",
+      description: "",
+    },
+    {
+      value: "blue",
+      label: "Rango de Salario: mas de 1000",
+      description: "",
+    },
+  ];
+  const colourStyles = {
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+      // const color = chroma(data.color);
+      console.log({ data, isDisabled, isFocused, isSelected });
+      return {
+        ...styles,
+        backgroundColor: isFocused ? "#0064BE" : "",
+
+        color: isFocused ? "#F9FAFC" : "#191D2F",
+        display: "flex",
+        paddingLeft: 0,
+
+        "& .left": {
+          display: "flex",
+          justifyContent: "center",
+          width: 60,
+          marginTop: 3,
+        },
+        "& .right": {
+          width: "100%",
+        },
+
+        "& .right > .title": {
+          display: "block",
+          margin: "5px 0",
+        },
+      };
+    },
   };
+  const Option = (props) => {
+    return (
+      <components.Option {...props}>
+        <div className="left">{props.isSelected ? "✔" : ""}</div>
+        <div className="right">
+          <strong className="title">{props.data.label}</strong>
+          <div>{props.data.description}</div>
+        </div>
+      </components.Option>
+    );
+  };
+  const initialName = userData.name;
+  const [loanInputs, setLoanInputs] = useState({
+    name: initialName,
+    phoneNumber: "",
+    age: "",
+    isEmployee: false,
+    salaryRange: "",
+  });
+
+  function handleFormSubmit(event) {
+    event.preventDefault();
+    setErrorMessage(null);
+    const { age, phoneNumber } = loanInputs;
+    if (age < 18 || age > 100) {
+      setErrorMessage("The age is not allowed");
+    } else if (phoneNumber.length < 10 || phoneNumber.length > 12) {
+      setErrorMessage("Phone Number Fromat Is Incorrect");
+    }
+    setShowModal(true);
+  }
+
+  const btnIsDisabled =
+    loanInputs.name === "" ||
+    loanInputs.age === "" ||
+    loanInputs.phoneNumber === "";
+
+  function handleDivClick() {
+    console.log("div clicked");
+    if (showModal) {
+      setShowModal(false);
+    }
+  }
+
+  function handlePhoneNumberInputChange(value) {
+    setLoanInputs({ ...loanInputs, phoneNumber: value });
+  }
+
+  function handleNameInputChange(value) {
+    setLoanInputs({ ...loanInputs, name: value });
+  }
+
+  function handleAgeInputChange(value) {
+    setLoanInputs({ ...loanInputs, age: value });
+  }
   return (
     <div>
       <h2>HTML Forms</h2>
-      <div style={{ paddingLeft: "1%" }}>
-        <form
-          style={{
+      <div>
+        <Box
+          sx={{
             display: "flex",
-            borderRadius: "10px",
-            flexDirection: "colum",
-
-            maxWidth: "300px",
-            paddingTop: "1%",
-            paddingBottom: "1%",
-
-            backgroundColor: "#FFA07A",
-            borderStyle: "none",
+            flexDirection: "column",
+            gap: 2,
+            maxWidth: "25%",
+            paddingLeft: "38%",
           }}
         >
-          <table
-            style={{
-              position: "center",
+          <TextField label="Nombre" variant="outlined" required />
+          <TextField label="Edad" variant="outlined" required />
+          <TextField
+            className="loanInput"
+            label="Telefono"
+            variant="outlined"
+            type="phone"
+            required
+          />
+          <TextField label="Email" variant="outlined" type="email" required />
+          <lable>
+            eres Trabajador? <Checkbox />
+          </lable>
+
+          <Select
+            defaultValue={colourOptions[0]}
+            label="Single select"
+            options={colourOptions}
+            styles={colourStyles}
+            components={{
+              Option,
             }}
-          >
-            <dt>
-              <lable>NOMBRE:</lable>
-              <input
-                style={{
-                  borderStyle: "none",
-                  borderRadius: "10px",
-                }}
-              ></input>
-            </dt>
-            <dt>
-              <p></p>
-            </dt>
-            <dt>
-              <lable>APELLIDO:</lable>
-              <input
-                style={{
-                  borderStyle: "none",
-                  borderRadius: "10px",
-                }}
-              ></input>
-            </dt>
-            <dt>
-              <p></p>
-            </dt>
-            <dt>
-              <lable>TELEFONO:</lable>
-              <input
-                style={{
-                  borderStyle: "none",
-                  borderRadius: "10px",
-                }}
-              ></input>
-            </dt>
-            <dt>
-              <p></p>
-            </dt>
-            <dt>
-              <lable>CORREO:</lable>
-              <input
-                style={{
-                  borderStyle: "none",
-                  borderRadius: "10px",
-                }}
-              ></input>
-            </dt>
-            <dt>
-              <p></p>
-            </dt>
-            <dt>
-              <lable>DIRECCION:</lable>
-              <input
-                style={{
-                  borderStyle: "none",
-                  borderRadius: "10px",
-                }}
-              ></input>
-            </dt>
-            <dt>
-              <p></p>
-            </dt>
-            <dt>
-              <lable>eres Trabajador?</lable>
-              <input
-                style={{
-                  borderStyle: "none",
-                  borderRadius: "10px",
-                }}
-                type="checkBox"
-              ></input>
-            </dt>
-            <dt>
-              <p></p>
-            </dt>
-            <dt>
-              <lable>selecciona uno:</lable>
-              <select
-                style={{
-                  borderStyle: "none",
-                  borderRadius: "10px",
-                }}
-              >
-                <option>100-200</option>
-                <option>201-300</option>
-                <option>301-400</option>
-                <option>401-500</option>
-              </select>
-            </dt>
-            <dt>
-              <p></p>
-            </dt>
-            <dt>
-              <button
-                style={{
-                  paddingTop: "2%",
-                  paddingBottom: "2%",
-                  position: "center",
-                  lineHeight: "2",
-                  borderStyle: "none",
-                  borderRadius: "10px",
-                  backgroundColor: "#E9967A",
-                  background: "rgb(228, 142, 81)",
-                }}
-              >
-                <b>Guardar</b>
-              </button>
-            </dt>
-          </table>
-        </form>
+          />
+
+          <Button variant="contained" color="primary" type="submit">
+            Guardar
+          </Button>
+        </Box>
       </div>
     </div>
   );
 }
-export default loanForm;
+export default LoanForm;

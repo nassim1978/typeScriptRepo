@@ -20,9 +20,13 @@ function App() {
       <div>
         <Header />
         <hr></hr>
-        <div className="App" style={{ marginTop: "250px" }}>
+        <div
+          className="App"
+          style={{ marginTop: "50px", marginBottom: "50px" }}
+        >
           <LoanForm />
         </div>
+        <hr></hr>
       </div>
       <div className="Nbody123">
         <PageBody />
